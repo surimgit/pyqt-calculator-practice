@@ -5,4 +5,4 @@ PyQt5 based calculator -Used for practice
 ## Goals
 
 * github 저장소생성 및관리 실습
-* PyQt5 기반 계산기 
+* PyQt5 기반 계산기 기능 및 사용방법 개선
