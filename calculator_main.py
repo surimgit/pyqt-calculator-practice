@@ -8,6 +8,7 @@ class Main(QDialog):
         self.init_ui()
 
     def init_ui(self):
+
         main_layout = QVBoxLayout()
 
         ### 각 위젯을 배치할 레이아웃을 미리 만들어 둠
@@ -18,6 +19,7 @@ class Main(QDialog):
         ### 수식 입력과 답 출력을 위한 LineEdit 위젯 생성
         label_equation = QLabel()
         self.equation = QLineEdit()
+        self.last_equation = ""
 
         ### layout_equation_solution 레이아웃에 수식, 답 위젯을 추가
         layout_equation_solution.addRow(label_equation, self.equation)
@@ -50,9 +52,6 @@ class Main(QDialog):
         layout_number.addWidget(button_minus, 1, 3)
         layout_number.addWidget(button_product, 2, 3)
         layout_number.addWidget(button_equal, 3, 3)
-
-       
-
 
         ### =, clear, clearE, backspace 버튼 클릭 시 시그널 설정
         button_equal.clicked.connect(self.button_equal_clicked)
@@ -92,8 +91,8 @@ class Main(QDialog):
         button_dot.clicked.connect(lambda state, num = ".": self.number_button_clicked(num))
         layout_number.addWidget(button_dot, 3, 2)
 
-        button_double_zero = QPushButton("00")
-        button_double_zero.clicked.connect(lambda state, num = "00": self.number_button_clicked(num))
+        button_double_zero = QPushButton("+/-")
+        button_double_zero.clicked.connect(self.PlusMinus_button_clicked)
         layout_number.addWidget(button_double_zero, 3, 0)
 
         ### 각 레이아웃을 main_layout 레이아웃에 추가
@@ -112,13 +111,22 @@ class Main(QDialog):
         equation += str(num)
         self.equation.setText(equation)
 
+    def PlusMinus_button_clicked(self):
+        equation = self.equation.text()
+        equation = int(equation)
+        equation *= -1
+        equation = str(equation)
+        self.equation.setText(equation)
+
     def button_operation_clicked(self, operation):
         equation = self.equation.text()
         equation += operation
-        self.equation.setText(equation)
+        self.equation.setText("")
+        self.last_equation = equation
 
-    def button_equal_clicked(self):
+    def button_equal_clicked(self, empty):
         equation = self.equation.text()
+        equation = self.last_equation + equation
         solution = eval(equation)
         self.equation.setText(str(solution))
 
