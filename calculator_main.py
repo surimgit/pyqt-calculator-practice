@@ -1,5 +1,5 @@
 import sys
-import numpy
+import math
 from PyQt5.QtWidgets import *
 
 class Main(QDialog):
@@ -36,7 +36,7 @@ class Main(QDialog):
         button_product.clicked.connect(lambda state, operation = "*": self.button_operation_clicked(operation))
         button_division.clicked.connect(lambda state, operation = "/": self.button_operation_clicked(operation))
 
-         ### =, clear, clearE, backspace 버튼 생성
+        ### =, clear, clearE, backspace, 역수, 제곱, 제곱근 나머지 버튼 생성
         button_equal = QPushButton("=")
         button_clear = QPushButton("C")
         button_clearE = QPushButton("CE")
@@ -53,17 +53,17 @@ class Main(QDialog):
         layout_number.addWidget(button_product, 2, 3)
         layout_number.addWidget(button_equal, 3, 3)
 
-        ### =, clear, clearE, backspace 버튼 클릭 시 시그널 설정
+        ### =, clear, clearE, backspace, 역수, 제곱, 제곱근 나머지 버튼 클릭 시 시그널 설정
         button_equal.clicked.connect(self.button_equal_clicked)
         button_clear.clicked.connect(self.button_clear_clicked)
         button_clearE.clicked.connect(self.button_clear_clicked)
         button_backspace.clicked.connect(self.button_backspace_clicked)
-        button_reciprocal.clicked.connect(self.button_equal_clicked)
-        button_square.clicked.connect(self.button_clear_clicked)
-        button_squareRoot.clicked.connect(self.button_clear_clicked)
-        button_remain.clicked.connect(self.button_backspace_clicked)
+        button_reciprocal.clicked.connect(self.button_reiprocal_clicked)
+        button_square.clicked.connect(self.button_square_clicked)
+        button_squareRoot.clicked.connect(self.button_squareRoot_clicked)
+        button_remain.clicked.connect(lambda state, operation = "%": self.button_operation_clicked(operation))
 
-        ### =, clear, backspace 버튼을 layout_clear_equal 레이아웃에 추가
+        ### =, clear, backspace, 역수, 제곱, 제곱근 나머지 버튼을 layout_clear_equal 레이아웃에 추가
         layout_clear_equal.addWidget(button_remain, 0, 0)
         layout_clear_equal.addWidget(button_clearE, 0, 1)
         layout_clear_equal.addWidget(button_clear, 0, 2)
@@ -86,7 +86,7 @@ class Main(QDialog):
             elif number==0:
                 layout_number.addWidget(number_button_dict[number], 3, 1)
 
-        ### 소숫점 버튼과 00 버튼을 입력하고 시그널 설정
+        ### 소숫점 버튼과 부호 변경 버튼을 입력하고 시그널 설정
         button_dot = QPushButton(".")
         button_dot.clicked.connect(lambda state, num = ".": self.number_button_clicked(num))
         layout_number.addWidget(button_dot, 3, 2)
@@ -113,7 +113,7 @@ class Main(QDialog):
 
     def PlusMinus_button_clicked(self):
         equation = self.equation.text()
-        equation = int(equation)
+        equation = float(equation)
         equation *= -1
         equation = str(equation)
         self.equation.setText(equation)
@@ -132,6 +132,34 @@ class Main(QDialog):
 
     def button_clear_clicked(self):
         self.equation.setText("")
+
+    def button_reiprocal_clicked(self):
+        equation = self.equation.text()
+        equation = float(equation)
+        equation = pow(equation, -1) 
+        equation = str(equation)
+        self.equation.setText(equation)
+  
+    def button_square_clicked(self):
+        equation = self.equation.text()
+        equation = float(equation)
+        equation = math.pow(equation, 2)
+        equation = str(equation)
+        self.equation.setText(equation)
+ 
+    def button_squareRoot_clicked(self):
+        equation = self.equation.text()
+        equation = float(equation)
+        equation = math.sqrt(equation)
+        equation = str(equation)
+        self.equation.setText(equation)
+
+    def button_remain_clicked(self):
+        equation = self.equation.text()
+        equation = float(equation)
+        equation = pow(equation, -1) 
+        equation = str(equation)
+        self.equation.setText(equation)
 
     def button_backspace_clicked(self):
         equation = self.equation.text()
