@@ -1,4 +1,5 @@
 import sys
+import numpy
 from PyQt5.QtWidgets import *
 
 class Main(QDialog):
@@ -10,7 +11,7 @@ class Main(QDialog):
         main_layout = QVBoxLayout()
 
         ### 각 위젯을 배치할 레이아웃을 미리 만들어 둠
-        layout_clear_equal = QHBoxLayout()
+        layout_clear_equal = QGridLayout()
         layout_number = QGridLayout()
         layout_equation_solution = QFormLayout()
 
@@ -25,7 +26,7 @@ class Main(QDialog):
         button_plus = QPushButton("+")
         button_minus = QPushButton("-")
         button_product = QPushButton("x")
-        button_division = QPushButton("/")
+        button_division = QPushButton("÷")
 
         ### 사칙연산 버튼을 클릭했을 때, 각 사칙연산 부호가 수식창에 추가될 수 있도록 시그널 설정
         button_plus.clicked.connect(lambda state, operation = "+": self.button_operation_clicked(operation))
@@ -33,27 +34,45 @@ class Main(QDialog):
         button_product.clicked.connect(lambda state, operation = "*": self.button_operation_clicked(operation))
         button_division.clicked.connect(lambda state, operation = "/": self.button_operation_clicked(operation))
 
+         ### =, clear, clearE, backspace 버튼 생성
+        button_equal = QPushButton("=")
+        button_clear = QPushButton("C")
+        button_clearE = QPushButton("CE")
+        button_backspace = QPushButton("←")
+        button_reciprocal = QPushButton("𝟏/𝒙")
+        button_square = QPushButton("𝒙²")
+        button_squareRoot = QPushButton("²√𝒙")
+        button_remain = QPushButton("%")
+        
         ### 사칙연산 버튼을 layout_operation 레이아웃에 추가
 
         layout_number.addWidget(button_plus, 0, 3)
         layout_number.addWidget(button_minus, 1, 3)
         layout_number.addWidget(button_product, 2, 3)
-        layout_number.addWidget(button_division, 3, 3)
+        layout_number.addWidget(button_equal, 3, 3)
 
-        ### =, clear, backspace 버튼 생성
-        button_equal = QPushButton("=")
-        button_clear = QPushButton("Clear")
-        button_backspace = QPushButton("Backspace")
+       
 
-        ### =, clear, backspace 버튼 클릭 시 시그널 설정
+
+        ### =, clear, clearE, backspace 버튼 클릭 시 시그널 설정
         button_equal.clicked.connect(self.button_equal_clicked)
         button_clear.clicked.connect(self.button_clear_clicked)
+        button_clearE.clicked.connect(self.button_clear_clicked)
         button_backspace.clicked.connect(self.button_backspace_clicked)
+        button_reciprocal.clicked.connect(self.button_equal_clicked)
+        button_square.clicked.connect(self.button_clear_clicked)
+        button_squareRoot.clicked.connect(self.button_clear_clicked)
+        button_remain.clicked.connect(self.button_backspace_clicked)
 
         ### =, clear, backspace 버튼을 layout_clear_equal 레이아웃에 추가
-        layout_clear_equal.addWidget(button_clear)
-        layout_clear_equal.addWidget(button_backspace)
-        layout_clear_equal.addWidget(button_equal)
+        layout_clear_equal.addWidget(button_remain, 0, 0)
+        layout_clear_equal.addWidget(button_clearE, 0, 1)
+        layout_clear_equal.addWidget(button_clear, 0, 2)
+        layout_clear_equal.addWidget(button_backspace, 0, 3)
+        layout_clear_equal.addWidget(button_reciprocal, 1, 0)
+        layout_clear_equal.addWidget(button_square, 1, 1)
+        layout_clear_equal.addWidget(button_squareRoot, 1, 2)
+        layout_clear_equal.addWidget(button_division, 1, 3)
 
         ### 숫자 버튼 생성하고, layout_number 레이아웃에 추가
         ### 각 숫자 버튼을 클릭했을 때, 숫자가 수식창에 입력 될 수 있도록 시그널 설정
@@ -104,7 +123,6 @@ class Main(QDialog):
         self.equation.setText(str(solution))
 
     def button_clear_clicked(self):
-        self.equation.setText("")
         self.equation.setText("")
 
     def button_backspace_clicked(self):
